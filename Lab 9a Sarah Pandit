@@ -1,0 +1,82 @@
+#SARAH PANDIT
+#sarah57codes
+
+# Create a rock-paper-scissors game!
+# - Play once and report the result
+# - Play in a loop and record how many wins and losses happen?
+# - Allow choosing how many human players there are, from 0-2?
+# - Organize everything into functions?
+# - Organize everything into classes??
+
+import random
+
+class RockPaperScissors:
+    def __init__(self, num_players=1):
+        self.choices = ['rock', 'paper', 'scissors']
+        self.num_players = num_players
+        self.scores = {'Player 1': 0, 'Player 2': 0, 'Computer': 0}
+
+    def get_player_choice(self, player_number):
+        """Prompt user to pick 'rock', 'paper', or 'scissors' and return the choice."""
+        while True:
+            choice = input(f'Player {player_number}, pick one of rock, paper or scissors: ').lower()
+            if choice in self.choices:
+                return choice
+            print("Invalid choice. Please choose 'rock', 'paper', or 'scissors'.")
+
+    def get_computer_choice(self):
+        """Randomly pick 'rock', 'paper', or 'scissors' for the computer."""
+        return random.choice(self.choices)
+
+    def determine_winner(self, choice1, choice2):
+        """Determine and return the winner between two choices."""
+        if choice1 == choice2:
+            return 'Tie'
+        elif (choice1 == 'rock' and choice2 == 'scissors') or \
+             (choice1 == 'scissors' and choice2 == 'paper') or \
+             (choice1 == 'paper' and choice2 == 'rock'):
+            return 'Player 1'
+        else:
+            return 'Player 2' if self.num_players == 2 else 'Computer'
+
+    def play_round(self):
+        """Play a round of rock-paper-scissors."""
+        if self.num_players == 0:
+            p1, p2 = self.get_computer_choice(), self.get_computer_choice()
+        elif self.num_players == 1:
+            p1 = self.get_player_choice(1)
+            p2 = self.get_computer_choice()
+        else:
+            p1 = self.get_player_choice(1)
+            p2 = self.get_player_choice(2)
+
+        print(f"Player 1 chose: {p1}")
+        if self.num_players == 2:
+            print(f"Player 2 chose: {p2}")
+        else:
+            print(f"Computer chose: {p2}")
+
+        winner = self.determine_winner(p1, p2)
+        if winner != 'Tie':
+            self.scores[winner] += 1
+
+        return winner
+
+    def play_game(self):
+        """Play the game for a series of rounds until the user quits."""
+        while True:
+            winner = self.play_round()
+            print(f"{winner} wins this round!") if winner != 'Tie' else print("It's a tie!")
+            print("Current scores:", self.scores)
+            if input("Play another round? (yes/no): ").lower() != 'yes':
+                break
+
+if __name__ == "__main__":
+    num_players = int(input("How many human players (0-2)? "))
+    game = RockPaperScissors(num_players)
+    game.play_game()
+
+#Class-Based Structure:The game is structured into a class `RockPaperScissors` for better organization and modifiability.
+#Multiple Players: The game supports 0, 1, or 2 players. The choices and interactions change based on the number of players.
+#Scoring System:*Tracks and displays scores after each round.
+#Repeated Play:Allows the game to be played in multiple rounds until the user decides to stop.
